@@ -1,0 +1,26 @@
+- name: Create instance(s)
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    service_account_email: 442159393952-compute@developer.gserviceaccount.com
+    credentials_file: ./service-account.json
+    project_id: studied-yen-219111
+    machine_type: n1-standard-1
+    image: ubuntu-1604
+
+  tasks:
+
+   - name: Launch LB
+     gce_lb:
+         name: counterapp-lb
+         region: us-central1
+         members: ["us-central1-a/app"]
+         port_range: 5000
+         httphealthcheck_name: hc
+         httphealthcheck_port: 5000
+         httphealthcheck_path: "/"
+         service_account_email: "{{ service_account_email }}"
+         credentials_file: "{{ credentials_file }}"
+         project_id: "{{ project_id }}"
