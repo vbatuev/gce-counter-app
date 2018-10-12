@@ -1,0 +1,19 @@
+---
+- name: Copy configuration file
+  copy:
+    src: countapp.cfg
+    dest: /usr/local/etc/countapp.cfg
+  tags:
+    - counterapp
+
+- name: Run counter application
+  docker_container:
+    image: vbatuev/counter-app
+    name: counter-app
+    ports:
+      - "5000:5000"
+    links:
+      - "mongodb:mongodb"
+    env_file: /usr/local/etc/countapp.cfg
+  tags:
+    - counterapp
