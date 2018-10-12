@@ -10,6 +10,7 @@
   docker_container:
     image: vbatuev/counter-app
     name: counter-app
+    restart_policy: unless-stopped
     ports:
       - "5000:5000"
     links:

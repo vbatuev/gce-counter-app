@@ -3,6 +3,7 @@
   docker_container:
     image: mongo
     name: mongodb
+    restart_policy: unless-stopped
     ports:
       - "27017:27017"
   tags:
