@@ -1,0 +1,37 @@
+---
+- name: get docker
+  get_url:
+    url: https://get.docker.com
+    dest: /tmp/get-docker.sh
+    mode: 0777
+  tags:
+    - docker_host/get_docker
+
+- name: install docker
+  shell: |
+    sh /tmp/get-docker.sh
+  tags:
+    - docker_host/get_docker
+
+- name: Enable docker daemon
+  service:
+    name: docker
+    enabled: yes
+  tags:
+    - docker_host/get_docker
+
+- name: Install python pip
+  package:
+    name: python-pip
+    state: present
+  tags:
+    - docker_host/docker-compose
+
+- name: Install docker-compose
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - docker-py
+
+  tags:
+    - docker_host/docker-compose
