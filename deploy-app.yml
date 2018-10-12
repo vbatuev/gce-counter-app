@@ -1,0 +1,40 @@
+- name: Create instances
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    service_account_email: ---
+    credentials_file: file.json
+    project_id: ---
+    machine_type: n1-standard-1
+    image: ubuntu-1604
+
+  tasks:
+
+   - name: Launch application instances
+     gce:
+         instance_names: app
+         machine_type: "{{ machine_type }}"
+         image: "{{ image }}"
+         service_account_email: "{{ service_account_email }}"
+         credentials_file: "{{ credentials_file }}"
+         project_id: "{{ project_id }}"
+         tags: app
+         preemptible: true
+     register: gce
+
+   - name: Wait for SSH
+     wait_for: host={{ item.public_ip }} port=22 delay=10 timeout=360
+     loop: "{{ gce.instance_data }}"
+
+   - name: Add host to group
+     add_host: hostname={{ item.public_ip }} groupname=appservers
+     loop: "{{ gce.instance_data }}"
+
+- name: Provision app servers
+  hosts: appservers
+  connection: ssh
+  sudo: True
+  roles:
+    - counter-app
