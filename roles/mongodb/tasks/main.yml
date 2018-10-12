@@ -1,0 +1,9 @@
+---
+- name: Run mongodb instance
+  docker_container:
+    image: mongo
+    name: mongodb
+    ports:
+      - "27017:27017"
+  tags:
+    - mongodb
