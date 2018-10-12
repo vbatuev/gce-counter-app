@@ -8,9 +8,13 @@ Please note, that this playbooks uses [ansible dynamic inventory script](https:/
 
 To deploy application use `deploy-app.yml` playbook
 
+
 Then use `deploy-lb.yml` playbook to deploy load balancer.
 
 TODO:
 - Add tests
 - Add CI
 - Add some automation for firewalls, manage DNS zones and records
+
+Then use `deploy-app-lb.yml` playbook to deploy load balancer.
+
